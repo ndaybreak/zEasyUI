@@ -6,12 +6,12 @@
 	"text":"C#"
 },{
 	"id":3,
-	"text":"Ruby",
-	"selected":true
+	"text":"Ruby"
 },{
 	"id":4,
 	"text":"Perl"
 },{
 	"id":5,
-	"text":"Basic"
+	"text":"Basic",
+	"selected":true
 }]
