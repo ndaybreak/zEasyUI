@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ValidateBox - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="demo.css">
+	<style type="text/css">
+		input,textarea{
+			width:200px;
+			border:1px solid #ccc;
+			padding:2px;
+		}
+		.container {
+			width: 600px;
+		}
+		.left {
+			display: inline-block;
+			float: left;
+		}
+		.left {
+			display: inline-block;
+		}
+	</style>
+	<script type="text/javascript" src="../jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+	<script>
+		$(function() {
+			$.extend($.fn.validatebox.defaults.rules, {  
+			    minLength: {  
+			        validator: function(value, param){  
+			            return value.length >= param[0];  
+			        },  
+			        message: 'Please enter at least {0} characters.'  
+			    }  
+			});
+			
+			$.extend($.fn.validatebox.defaults.rules, {  
+			    paramTest: {  
+			        validator: function(value, param){  
+			        	console.log(param)
+			            return value.length >= param[0];  
+			        },  
+			        message: 'Please enter at least {0} characters.'  
+			    }  
+			});
+			
+			$('#minLengthTest').validatebox({
+				required: true,
+				validType: 'length[2,5]',
+				missingMessage: '空时的提示信息',
+				invalidMessage: '值无效的提示信息'
+			})
+		})
+	</script>
+</head>
+<body>
+	<a href="" class="easyui-linkbutton">refresh</a><p>
+	<h2>ValidateBox</h2>
+	<div class="demo-info" style="margin-bottom:10px">
+		<div class="demo-tip icon-tip"></div>
+		<div>It's easy to add validate logic to a input box.</div>
+	</div>
+	<div class="container">
+		<div class="left">
+			<table>
+				<tr>
+					<td>Name:</td>
+					<td><input id="minLengthTest"></td>
+				</tr>
+				<tr>
+					<td>参数:</td>
+					<td><input class="easyui-validatebox" required="true" validType="paramTest[5,10,'xxxx','ddd']" ></td>
+				</tr>
+				<tr>
+					<td>URL:</td>
+					<td><input class="easyui-validatebox" required="true" validType="url"></td>
+				</tr>
+				<tr>
+					<td>Note:</td>
+					<td><textarea class="easyui-validatebox" required="true" style="height:100px;"></textarea></td>
+				</tr>
+			</table>
+		</div>
+		<div  class="right">
+			<table>
+				<tr>
+					<td>minLength[3]:</td>
+					<td><input class="easyui-validatebox" required="true" validType="minLength[3]"></td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td><input class="easyui-validatebox" validType="email"></td>
+				</tr>
+				<tr>
+					<td>URL:</td>
+					<td><input class="easyui-validatebox" required="true" validType="url"></td>
+				</tr>
+				<tr>
+					<td>Note:</td>
+					<td><textarea class="easyui-validatebox" required="true" style="height:100px;"></textarea></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
