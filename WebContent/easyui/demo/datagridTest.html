@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Complex DataGrid - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="demo.css">
+	<script type="text/javascript" src="../jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+	<script>
+		$(function(){
+			$('#test').datagrid({
+				title:'出口托单列表',
+				//iconCls:'icon-edit',
+				width: 1200,
+				height: 550,
+				nowrap: false,
+				//striped: true,
+				//collapsible:true,
+				url:'datagrid_data.json',
+				sortName: 'code',
+				sortOrder: 'desc',
+				remoteSort: false,
+				idField:'code',
+				frozenColumns:[[
+	                {title:'ID',field:'id',width:80,sortable:true}
+				]],
+				columns:[[
+					{field:'tip', title:'订舱提示',width:120, sortable:true},
+					{field:'unit', title:'订舱单位', width:150},
+					{field:'no', title:'提单号', width:150},
+					{field:'boxNum', title:'箱数量',width:150, sortable:true,
+						sorter:function(a,b){
+							return (a>b?1:-1);
+						}
+					},
+					{field:'port', title:'所属港', width:200},
+					{field:'date', title:'船期', width:200},
+					{field:'opt',title:'Operation',width:100,align:'center', rowspan:2,
+						formatter:function(value,rec){
+							return '<span style="color:red">Edit Delete</span>';
+						}
+					}
+				]],
+				pagination:true,
+				pageSize:10,
+				pageList: [10, 20],
+				rownumbers:true,
+				toolbar:[{
+					id:'btnadd',
+					text:'Add',
+					iconCls:'icon-add',
+					handler:function(){
+						$('#btnsave').linkbutton('enable');
+						alert('add')
+					}
+				},{
+					id:'btncut',
+					text:'Cut',
+					iconCls:'icon-cut',
+					handler:function(){
+						$('#btnsave').linkbutton('enable');
+						alert('cut')
+					}
+				},'-',{
+					id:'btnsave',
+					text:'Save',
+					disabled:true,
+					iconCls:'icon-save',
+					handler:function(){
+						$('#btnsave').linkbutton('disable');
+						alert('save')
+					}
+				}],
+				onDblClickRow: function(index, rowData) {
+					
+					$('#content').html('提单号 : ' + rowData.no);
+					$('#detailContainer').dialog('open');
+				}
+			});
+			var p = $('#test').datagrid('getPager');
+			$(p).pagination({
+				onBeforeRefresh:function(){
+					//alert('before refresh');
+				}
+			});
+			
+			
+			$('#submitBtn').click(function() {
+				$('#searchForm').form('submit', {  
+				    url: 'datagrid_data.json',  
+				    onSubmit: function(){  
+				    },  
+				    success:function(data){  
+				    	$('#test').datagrid('loadData', JSON.parse(data))
+				    }  
+				});  
+			})
+			
+			$('#detailContainer').dialog({
+				toolbar:[{
+					text:'Add',
+					iconCls:'icon-add',
+					handler:function(){
+						alert('add')
+					}
+				},'-',{
+					text:'Save',
+					iconCls:'icon-save',
+					handler:function(){
+						alert('save')
+					}
+				}],
+				buttons:[{
+					text:'Ok',
+					iconCls:'icon-ok',
+					handler:function(){
+						$('#detailContainer').dialog('close');
+					}
+				},{
+					text:'Cancel',
+					handler:function(){
+						$('#detailContainer').dialog('close');
+					}
+				}]
+			});
+			$('#detailContainer').dialog('close');
+		});
+	</script>
+</head>
+<body>
+	<div>
+		<form id="searchForm" class="search-form" method="post">
+			<div class="row form-row">
+				<div class="col-2">
+		            <label for="unit">订舱单位</label>
+		            <input type="text" name="unit" ></input>
+		        </div>
+		        <div class="col-2">
+		            <label for="tip">订舱提示</label>
+		            <input type="text" name="tip" ></input>
+		        </div>
+		        <div class="col-8">
+		            <label for="no">提单号</label>
+		            <input type="text" name="no" ></input>
+		        </div>
+			</div>
+			<div class="row form-row">
+		        <div class="col-2">
+		            <label for="fromDate">船期</label>
+		            <input id="fromDate" class="easyui-datebox" name="fromDate"></input>
+		        </div>
+		        <div class="col-2">
+		            <label for="toDate" class="to-date-label">---</label>
+		            <input id="toDate" class="easyui-datebox" name="toDate"></input>
+		        </div>
+		        <div class="col-2">
+		            <label for="boxNum">箱数量</label>
+		            <input type="text" name="boxNum"></input>
+		        </div>
+		        <div class="col-2">
+		            <label for="port">所属港</label>
+		            <select id="cc" class="easyui-combobox" name="port">
+						<option value="XG">香港</option>
+						<option value="SHZ">深圳</option>
+					</select>
+		        </div>
+		        <div class="col-4">
+		            <a id="submitBtn" class="easyui-linkbutton">查询</a>
+		        </div>
+	        </div>
+	    </form>
+        <div>
+        </div>
+	</div>
+	
+	<table id="test"></table>
+	
+	<div id="detailContainer" icon="icon-save" style="padding:5px;width:400px;height:200px;">
+		<div id="content"></div>
+	</div>
+</body>
+</html>

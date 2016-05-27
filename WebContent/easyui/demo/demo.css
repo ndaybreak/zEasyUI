@@ -24,3 +24,75 @@ h2 {
 	height:16px;
 	float:left;
 }
+
+/* ==== */
+
+.row:after {
+	clear: both;
+	content: " ";
+    display: table;
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+    float: left;
+}
+.col-12 {
+  width: 100%;
+}
+.col-11 {
+  width: 91.66666667%;
+}
+.col-10 {
+  width: 83.33333333%;
+}
+.col-9 {
+  width: 75%;
+}
+.col-8 {
+  width: 66.66666667%;
+}
+.col-7 {
+  width: 58.33333333%;
+}
+.col-6 {
+  width: 50%;
+}
+.col-5 {
+  width: 41.66666667%;
+}
+.col-4 {
+  width: 33.33333333%;
+}
+.col-3 {
+  width: 25%;
+}
+.col-2 {
+  width: 16.66666667%;
+}
+.col-1 {
+  width: 8.33333333%;
+}
+/* datagrid Test */
+
+.search-form {
+	width: 1350px;
+}
+.form-row {
+    padding: 2px 0;
+}
+.search-form label{
+	width: 52px;
+	display: inline-block;
+}
+.search-form input{
+	width: 150px;
+}
+.search-form .datebox {
+	width: 152px !important;
+}
+.search-form .datebox .combo-text {
+	width: 132px !important;
+}
+.to-date-label {
+	text-align: center;
+}
