@@ -1,4 +1,5 @@
 $(function() {
+	router.base = '/zEasyUI/webapp/modules/'
 	router
 		.when('booking-list', {
 				html: 'content.html',
@@ -19,24 +20,6 @@ $(function() {
 				controller: 'welcomePageCtrl'
 			})
 	
-	function doRoute() {
-		var routeName = location.hash
-		
-		if(routeName && routeName.length > 2) {
-			routeName = routeName.substring(2)
-		} else {
-			routeName = 'welcome-page'
-		}
-		
-		router.route(routeName, function() {
-			$.parser.parse('#mainPanle');
-		})
-	}
-	
-	window.onhashchange = function() {
-		doRoute()
-	}
-	
-	doRoute()
+	router.start()
 	
 });

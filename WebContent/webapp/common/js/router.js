@@ -43,7 +43,7 @@
             cache: false,
             dataType: 'text',
             success: function (res) {
-                $('#mainPanle').html(res)
+            	router.container.html(res)
                 if(callback) {
                 	callback()
                 }
@@ -53,17 +53,18 @@
         })
     }
 	
-	function loadModule(routeName, callback){
+	function loadModule(moduleName, callback){
 		var baseUrl,
-			module = router.modules[routeName],
+			module = router.modules[moduleName],
 			jsStatus = 'loading',
 			cssStatus = 'loading';
 		
 		if(module) {
-			baseUrl = router.base + 'modules/' + routeName + '/'
+			baseUrl = router.base + moduleName + '/'
 		} else {
-			alert('sorry, the page is not existed!')
-			return
+			moduleName = 'welcome-page'
+			module = router.modules[moduleName]
+			baseUrl = router.base + moduleName + '/'
 		}
 		
 		loadCss(baseUrl + module['css'], function(){
@@ -81,7 +82,7 @@
 		
 		function checkFinished(){
 			if (jsStatus == 'loaded' && cssStatus == 'loaded'){
-				router.onLoad(routeName);
+				router.onLoad(moduleName);
 				if (callback){
 					callback();
 				}
@@ -89,29 +90,51 @@
 		}
 	}
 	
-	function when(routeName, module) {
-		router.modules[routeName] = module
+	window.router = {
+		base:'',
+		container: '',
+		modules: {},
+		when: when,
+		load: function(moduleName, callback){
+			loadModule(moduleName, callback);
+		},
+		start: start,
+		onLoad: function(moduleName){console.log('module ' + moduleName + ' is loaded.')}
+	};
+	
+	function when(moduleName, module) {
+		router.modules[moduleName] = module
 		return router
 	}
 	
-	window.router = {
-		base:'.',
-		modules: {},
-		when: when,
-		route: function(routeName, callback){
-			loadModule(routeName, callback);
-		},
-		onLoad: function(routeName){console.log('module ' + routeName + ' is loaded.')}
-	};
-
-	var scripts = document.getElementsByTagName('script');
-	for(var i=0; i<scripts.length; i++){
-		var src = scripts[i].src;
-		if (!src) continue;
-		var m = src.match(/router\.js(\W|$)/i);
-		if (m){
-			router.base = src.substring(0, m.index);
+	function start() {
+		// get router base.
+		router.base = location.protocol + '//' + location.host + router.base
+		
+		var container = $('[easyui-view]')
+		if(container && container.length === 1) {
+			router.container = container
+		} else {
+			alert('please specify the easyui-view!')
+			return
 		}
+		
+		// route listening
+		function doRoute() {
+			var moduleName = location.hash
+			
+			if(moduleName && moduleName.length > 2) {
+				moduleName = moduleName.substring(2)
+			}
+			
+			router.load(moduleName, function() {
+				$.parser.parse(router.container);
+			})
+		}
+		window.onhashchange = function() {
+			doRoute()
+		}
+		doRoute()
 	}
 	
 })(jQuery);
