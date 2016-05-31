@@ -1,0 +1,48 @@
+<div>
+	<form id="searchForm" class="search-form" method="post">
+		<div class="row form-row">
+			<div class="col-2">
+	            <label for="unit">订舱单位</label>
+	            <input type="text" name="unit" ></input>
+	        </div>
+	        <div class="col-2">
+	            <label for="tip">订舱提示</label>
+	            <input type="text" name="tip" ></input>
+	        </div>
+	        <div class="col-8">
+	            <label for="no">提单号</label>
+	            <input type="text" name="no" ></input>
+	        </div>
+		</div>
+		<div class="row form-row">
+	        <div class="col-2">
+	            <label for="fromDate">船期</label>
+	            <input id="fromDate" class="easyui-datebox" name="fromDate"></input>
+	        </div>
+	        <div class="col-2">
+	            <label for="toDate"><label class="to-date-label"></label></label>
+	            <input id="toDate" class="easyui-datebox" name="toDate"></input>
+	        </div>
+	        <div class="col-2">
+	            <label for="boxNum">箱数量</label>
+	            <input type="text" name="boxNum"></input>
+	        </div>
+	        <div class="col-2">
+	            <label for="port">所属港</label>
+	            <select id="cc" class="easyui-combobox" name="port">
+					<option value="XG">香港</option>
+					<option value="SHZ">深圳</option>
+				</select>
+	        </div>
+	        <div class="col-4">
+	            <a id="searchBtn" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+	        </div>
+        </div>
+    </form>
+</div>
+
+<table id="testTable"></table>
+
+<div id="detailContainer" icon="icon-save" style="padding:5px;width:400px;height:200px;">
+	<div id="content"></div>
+</div>

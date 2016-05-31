@@ -1,15 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Demo SPA</title>
 	
 	<link rel="stylesheet" type="text/css" href="common/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="common/themes/icon.css">
 	<link rel="stylesheet" type="text/css" href="common/css/common.css">
 	
 	<script type="text/javascript" src="common/js/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="common/js/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="moduleLoader.js"></script>
+	<script type="text/javascript" src="router.js"></script>
 	<script type="text/javascript" src="index.js"></script>
 </head>
 <body class="easyui-layout">
@@ -19,14 +20,10 @@
 	<div region="west" border="true" split="true" title="Navigation" class="cs-west">
 		<div class="easyui-accordion" fit="true" border="false">
 				<div title="MyTest">
-					<a href="javascript:void(0);" src="bookingList" class="cs-navi-tab">datagridTest</a></p>
+					<a href="#/booking-list" class="cs-navi-tab">Booking List</a></p>
+					<a href="#/booking-detail" class="cs-navi-tab">Booking Detail</a></p>
 				</div>
 				<div title="Base">
-					<a href="javascript:void(0);" src="" class="cs-navi-tab">easyloader</a></p>
-				</div>
-				<div title="Layout">
-					<a href="javascript:void(0);" src="" class="cs-navi-tab">accordion</a></p>
-					<a href="javascript:void(0);" src="" class="cs-navi-tab">layout</a></p>
 				</div>
 		</div>
 	</div>

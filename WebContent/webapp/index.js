@@ -1,8 +1,42 @@
 $(function() {
-	$('.cs-navi-tab').click(function() {
-		var $this = $(this);
-		var moduleName = $this.attr('src');
+	router
+		.when('booking-list', {
+				html: 'content.html',
+				js: 'script.js',
+				css: 'style.css',
+				controller: 'bookingListCtrl'
+			})
+		.when('booking-detail', {
+				html: 'content.html',
+				js: 'script.js',
+				css: 'style.css',
+				controller: 'bookingDetailCtrl'
+			})
+		.when('welcome-page', {
+				html: 'content.html',
+				js: 'script.js',
+				css: 'style.css',
+				controller: 'welcomePageCtrl'
+			})
+	
+	function doRoute() {
+		var routeName = location.hash
 		
-		moduleLoader.load(moduleName)
-	});
+		if(routeName && routeName.length > 2) {
+			routeName = routeName.substring(2)
+		} else {
+			routeName = 'welcome-page'
+		}
+		
+		router.route(routeName, function() {
+			$.parser.parse('#mainPanle');
+		})
+	}
+	
+	window.onhashchange = function() {
+		doRoute()
+	}
+	
+	doRoute()
+	
 });
