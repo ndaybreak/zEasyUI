@@ -108,3 +108,7 @@ h2 {
     z-index: 1050;
     overflow: hidden;
 }
+
+.test {
+	color: green;
+}
