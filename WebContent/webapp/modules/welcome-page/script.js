@@ -1,0 +1,3 @@
+function welcomePageCtrl() {
+	alert('welcome')
+}

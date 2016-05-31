@@ -8,18 +8,10 @@
  *
  */
 /**
- * moduleLoader - jQuery EasyUI
+ * 路由： 通过一个路径名称来加载一个模块
  * 
  */
 (function(){
-	var modules = {
-		bookingList:{
-			html: 'content.html',
-			js: 'script.js',
-			css: 'style.css'
-		}
-	};
-	
 	function loadJs(url, callback){
 		$('#muduleScript').remove()
 		var done = false;
@@ -70,16 +62,17 @@
         })
     }
 	
-	function loadModule(name, callback){
+	function loadModule(routeName, callback){
 		var baseUrl,
-			module = modules[name],
+			module = router.modules[routeName],
 			jsStatus = 'loading',
 			cssStatus = 'loading';
 		
 		if(module) {
-			baseUrl = moduleLoader.base + 'modules/' + name + '/'
+			baseUrl = router.base + 'modules/' + routeName + '/'
 		} else {
 			alert('sorry, the page is not existed!')
+			return
 		}
 		
 		loadCss(baseUrl + module['css'], function(){
@@ -89,6 +82,7 @@
 		
 		loadHtml(baseUrl + module['html'], function(){
 			loadJs(baseUrl + module['js'], function(){
+				module['controller'] && window[module['controller']]()
 				jsStatus = 'loaded';
 				checkFinished();
 			});
@@ -96,7 +90,7 @@
 		
 		function checkFinished(){
 			if (jsStatus == 'loaded' && cssStatus == 'loaded'){
-				moduleLoader.onLoad(name);
+				router.onLoad(routeName);
 				if (callback){
 					callback();
 				}
@@ -104,23 +98,29 @@
 		}
 	}
 	
-	window.moduleLoader = {
-		modules:modules,
+	function when(routeName, module) {
+		router.modules[routeName] = module
+		return router
+	}
+	
+	window.router = {
 		base:'.',
-		load: function(name, callback){
-			loadModule(name, callback);
+		modules: {},
+		when: when,
+		route: function(routeName, callback){
+			loadModule(routeName, callback);
 		},
-		onLoad: function(name){console.log('module ' + name + ' is loaded.')}
+		onLoad: function(routeName){console.log('module ' + routeName + ' is loaded.')}
 	};
 
 	var scripts = document.getElementsByTagName('script');
 	for(var i=0; i<scripts.length; i++){
 		var src = scripts[i].src;
 		if (!src) continue;
-		var m = src.match(/moduleLoader\.js(\W|$)/i);
+		var m = src.match(/router\.js(\W|$)/i);
 		if (m){
-			moduleLoader.base = src.substring(0, m.index);
+			router.base = src.substring(0, m.index);
 		}
 	}
-
-})();
+	
+})(jQuery);
