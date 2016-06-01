@@ -26,6 +26,19 @@ h2 {
 }
 
 /* ==== */
+a:link {
+ text-decoration: none;
+}
+a:visited {
+ text-decoration: none;
+}
+a:hover {
+ text-decoration: underline;
+}
+a:active {
+ text-decoration: none;
+}
+
 
 .row:after {
 	clear: both;
@@ -75,28 +88,32 @@ h2 {
 /* datagrid Test */
 
 .search-form {
-	width: 1350px;
+	width: 1550px;
 }
 .form-row {
     padding: 2px 0;
 }
 .search-form label{
-	width: 52px;
+	width: 73px;
 	display: inline-block;
 }
 .search-form input{
 	width: 150px;
 }
-.search-form .datebox {
+.search-form .combo {
 	width: 152px !important;
 }
-.search-form .datebox .combo-text {
+.search-form .combo-text {
 	width: 132px !important;
 }
 .search-form .to-date-label {
 	border-top: 1px solid gray;
     height: 0px;
     width: 24px;
+}
+.search-form .enquiry-port,
+.search-form .to-label {
+	width: 30px;
 }
 .popup-shadow {
 	position: fixed;
@@ -106,4 +123,8 @@ h2 {
     left: 0;
     z-index: 1050;
     overflow: hidden;
+}
+.status_green {
+	color: green;
+    font-weight: bold;
 }

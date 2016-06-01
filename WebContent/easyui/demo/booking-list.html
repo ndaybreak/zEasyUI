@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Complex DataGrid - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="demo.css">
+	<script type="text/javascript" src="../jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="../jquery.easyui.min.js"></script>
+	<script>
+		var parentWindow = window.parent
+		$(function(){
+			// 初始化表格
+			$('#testTable').datagrid({
+				title:'订单列表',
+				//iconCls:'icon-edit',
+				width: 1600,
+				height: 550,
+				nowrap: false,
+				//striped: true,
+				//collapsible:true,
+				url:'booking_list_data.json',
+				sortName: 'code',
+				sortOrder: 'desc',
+				remoteSort: true,
+				idField:'code',
+				/* frozenColumns:[[
+	                {title:'ID',field:'id',width:80,sortable:true}
+				]], */
+				columns:[[
+					{field:'blNo', title:'运单号', width:120,
+						formatter:function(value,rec){
+							return '<a href="#">' + value + '</a>';
+						}
+					},
+					{field:'containerItems', title:'箱型/箱量',width:120, sortable:true,
+						formatter:function(items,rec){
+							var item,
+								str = ''
+								
+							for(var i = 0, len = items.length; i < len; i++) {
+								item = items[i]
+								str += item['ctnSizeType'] + 'X' + item['qty']
+								if(i < len - 1) {
+									str += ','
+								}
+							}
+							return str;
+						}
+					},
+					{field:'vessel', title:'船名/航次', width:120,
+						formatter:function(value,rec){
+							return (rec.vessel || '') + '<br />' + (rec.voyage || '');
+						}
+					},
+					{field:'orderType', title:'类型',width:120, sortable:true,
+						sorter:function(a,b){
+							return (a>b?1:-1);
+						}
+					},
+					{field:'fromPort', title:'接货地/交货地', width:120,
+						formatter:function(value,rec){
+							return (rec.fromPort || '') + ' <br /> ' + (rec.toPort || '');
+						}
+					},
+					{field:'contactPerson', title:'联系人', width:120},
+					{field:'contactPhone', title:'联系电话', width:120},
+					{field:'commissionTime', title:'委托时间', width:130},
+					{field:'planArriveTime', title:'预计做箱时间', width:130},
+					{field:'orderStatus', title:'车队状态', width:120,
+						formatter:function(value,rec){
+							return '<span class="status_green">' + value + '</span>';
+						}
+					},
+					{field:'franking', title:'打印', width:120,
+						formatter:function(value,rec){
+							if(value) {
+								return '&radic';
+							} else {
+								return '';
+							}
+						}
+					},
+					{field:'isExecuted', title:'办单', width:120,
+						formatter:function(value,rec){
+							if(value) {
+								return '&radic';
+							} else {
+								return '';
+							}
+						}
+					},
+					{field:'opt',title:'Operation',width:100,align:'center', rowspan:2,
+						formatter:function(value,rec){
+							return '<span style="color:red">编辑 撤销</span>';
+						}
+					}
+				]],
+				pagination:true,
+				pageSize:10,
+				pageList: [10, 20],
+				rownumbers:true,
+				/* toolbar:[{
+					id:'btnadd',
+					text:'Add',
+					iconCls:'icon-add',
+					handler:function(){
+						$('#btnsave').linkbutton('enable');
+						alert('add')
+					}
+				}], */
+				onDblClickRow: function(index, rowData) {
+					
+					$('#content').html('提单号 : ' + rowData.blNo);
+					$('#detailContainer').dialog('open');
+				}
+			});
+			
+			// 分页部分
+			var p = $('#testTable').datagrid('getPager');
+			$(p).pagination({
+				onBeforeRefresh:function(){
+					//alert('before refresh');
+				}
+			});
+			
+			// 查询
+			$('#searchBtn').click(function() {
+				$('#searchForm').form('submit', {  
+				    url: 'booking_list_data.json',  
+				    onSubmit: function(){  
+				    },  
+				    success:function(data){
+				    	console.log(data)
+				    	$('#testTable').datagrid('loadData', JSON.parse(data))
+				    }  
+				});  
+			})
+			
+			// 重置
+			$('#resetBtn').click(function() {
+				$('#searchForm').form('clear')
+			})
+			
+			// 添加/更新
+			$('#detailContainer').dialog({
+				title: 'xxx',
+				toolbar:[{
+					text:'Add',
+					iconCls:'icon-add',
+					handler:function(){
+						alert('add')
+					}
+				},'-',{
+					text:'Save',
+					iconCls:'icon-save',
+					handler:function(){
+						alert('save')
+					}
+				}],
+				buttons:[{
+					text:'Ok',
+					iconCls:'icon-ok',
+					handler:function(){
+						$('#detailContainer').dialog('close');
+					}
+				},{
+					text:'Cancel',
+					handler:function(){
+						$('#detailContainer').dialog('close');
+					}
+				}]
+			});
+			
+			
+			$('#detailContainer').dialog('close');
+		});
+	</script>
+</head>
+<body>
+	<div>
+		<form id="searchForm" class="search-form" method="post">
+			<div class="row form-row">
+				<div class="col-2">
+		            <label for="carStatus">车队状态</label>
+		            <input type="text" name="carStatus" ></input>
+		        </div>
+		        <div class="col-2">
+		            <label for="sailingTerm-order">类型</label>
+		            <select id="cc" class="easyui-combobox" name="sailingTerm-order">
+						<option value="">全部</option>
+						<option value="CY_DOOR">进口</option>
+						<option value="DOOR_CY">出口</option>
+					</select>
+		        </div>
+		        <div class="col-2">
+		            <label for="planningTimeFrom-order">委托时间</label>
+		            <input class="easyui-datebox" name="planningTimeFrom-order"></input>
+		        </div>
+		        <div class="col-6">
+		            <label for="timeTo" class="to-label">至</label>
+		            <input class="easyui-datebox" name="timeTo"></input>
+		        </div>
+			</div>
+			<div class="row form-row">
+				<div class="col-2">
+		            <label for="portCode-order">港口</label>
+		            <input type="text" name="portCode-order" ></input>
+		        </div>
+		        <div class="col-2">
+		            <label for="vessel">船名</label>
+		            <input type="text" name="vessel" ></input>
+		        </div>
+		        <div class="col-8">
+		            <label for="voyage">航次</label>
+		            <input type="text" name="voyage" ></input>
+		        </div>
+			</div>
+			<div class="row form-row">
+		        <div class="col-2">
+		            <label for="franking">打印</label>
+		            <select class="easyui-combobox" name="franking">
+						<option value="">全部</option>
+						<option value="true">是</option>
+						<option value="false">否</option>
+					</select>
+		        </div>
+		        <div class="col-2">
+		            <label for="executed">是否办单</label>
+		            <select class="easyui-combobox" name="executed">
+						<option value="">全部</option>
+						<option value="true">是</option>
+						<option value="false">否</option>
+					</select>
+		        </div>
+		        <div class="col-2">
+		            <label for="planningFrom-order-time">预计做箱时间</label>
+		            <input id="fromDate" class="easyui-datebox" name="planningFrom-order-time"></input>
+		        </div>
+		        <div class="col-2">
+		            <label for="planArriveTimeTo" class="to-label">至</label>
+		            <input id="toDate" class="easyui-datebox" name="planArriveTimeTo"></input>
+		        </div>
+		        <div class="col-4">
+		            <a id="searchBtn" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+		            <a id="resetBtn" class="easyui-linkbutton">重置</a>
+		        </div>
+	        </div>
+	    </form>
+        <div>
+        </div>
+	</div>
+	
+	<table id="testTable"></table>
+	
+	<div id="detailContainer" icon="icon-save" style="padding:5px;width:400px;height:200px;">
+		<div id="content"></div>
+	</div>
+</body>
+</html>
